@@ -24,7 +24,7 @@
     <ListPreference
         android:key="lSvrList"
         android:title="@string/pref_srv_list"
-        android:defaultValue="http://202.4.136.143/api/test.php"
+        android:defaultValue="@string/pref_default_svr_URL"
         android:entries="@array/pref_svr_list_titles"
         android:entryValues="@array/svr_urls"
         android:negativeButtonText="@null"

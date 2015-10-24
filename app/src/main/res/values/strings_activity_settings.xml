@@ -2,8 +2,13 @@
 
     <!-- Strings related to Settings -->
 
+    <string name="pref_URL">自定义服务器地址</string>
+    <string name="pref_default_svr_URL">http://202.4.136.143/api/test.php</string>
+    <string name="pref_srv_list">可用服务器选择</string>
+
     <!-- Example General settings -->
     <string name="pref_header_general">通用</string>
+    <string name="pref_header_account">账户</string>
     <!--<string name="pref_header_general">General</string>-->
 
     <string name="pref_title_social_recommendations">启用社交建议</string>

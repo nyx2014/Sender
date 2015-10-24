@@ -3,7 +3,4 @@
     <string name="title_activity_sender">Send Now</string>
 
     <string name="action_settings">Settings</string>
-    <string name="pref_URL">自定义服务器地址</string>
-    <string name="pref_default_svr_URL">http://202.4.136.143/api/test.php</string>
-    <string name="pref_srv_list">可用服务器选择</string>
 </resources>

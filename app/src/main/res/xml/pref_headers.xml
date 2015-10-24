@@ -2,6 +2,9 @@
 
     <!-- These settings headers are only used on tablets. -->
 
+    <header android:fragment="org.snc.sender.SettingsActivity$AccountPreferenceFragment"
+        android:title="@string/pref_header_account" />
+
     <header android:fragment="org.snc.sender.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
