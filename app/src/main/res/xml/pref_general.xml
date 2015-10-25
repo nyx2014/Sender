@@ -22,6 +22,15 @@
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
     <ListPreference
+        android:key="lTimeout"
+        android:title="@string/pref_timeout"
+        android:defaultValue="@string/pref_default_timeout"
+        android:entries="@array/pref_timeout_title"
+        android:entryValues="@array/pref_timeout_vals"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
+    <ListPreference
         android:key="lSvrList"
         android:title="@string/pref_srv_list"
         android:defaultValue="@string/pref_default_svr_URL"
@@ -39,4 +48,9 @@
         android:capitalize="words"
         android:singleLine="true"
         android:maxLines="1" />
+
+    <Preference android:title="@string/pref_title_system_sync_settings">
+        <intent android:action="android.settings.SYNC_SETTINGS" />
+    </Preference>
+
 </PreferenceScreen>

@@ -166,6 +166,7 @@ public class SettingsActivity extends PreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
+            bindPreferenceSummaryToValue(findPreference("lTimeout"));
             bindPreferenceSummaryToValue(findPreference("sURL"));
             bindPreferenceSummaryToValue(findPreference("lSvrList"));
         }

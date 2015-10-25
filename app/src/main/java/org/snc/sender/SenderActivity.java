@@ -1,8 +1,11 @@
 package org.snc.sender;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,6 +26,7 @@ import java.net.URLEncoder;
 public class SenderActivity extends Activity {
 
     private static String url;
+    private static int timeout;
 
     private SharedPreferences mPreferences;
     private static String sharedText;
@@ -70,9 +74,29 @@ public class SenderActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ConnectivityManager connectMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectMgr.getActiveNetworkInfo();
+
+        if (info!=null) {
+            if(info.getType() == ConnectivityManager.TYPE_WIFI){
+                Toast.makeText(this,"wifi!",Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(this,"mobile!",Toast.LENGTH_LONG).show();
+            }
+        }else {
+            Toast.makeText(this,"Network is down.",Toast.LENGTH_LONG).show();
+            finish();
+        }
+
         if(mPreferences==null){
             mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         }
+
+        String lTimeout = mPreferences.getString("lTimeout", "3000");
+        timeout = Integer.parseInt(lTimeout);
+
+        Toast.makeText(this,timeout+"",Toast.LENGTH_LONG).show();
 
         url = mPreferences.getString("lSvrList","http://202.4.136.143/api/test.php");
         url = url.equals("custom") ? mPreferences.getString("sURL","http://202.4.136.143/api/test.php") : url;
@@ -108,9 +132,12 @@ public class SenderActivity extends Activity {
         try {
             _url = new URL(url);
             connection = (HttpURLConnection) _url.openConnection();
-            int seconds = 3;
-            connection.setConnectTimeout(seconds * 1000);
-            connection.setReadTimeout(seconds * 1000);
+//            int seconds = 3;
+//            connection.setConnectTimeout(seconds * 1000);
+//            connection.setReadTimeout(seconds * 1000);
+
+            connection.setConnectTimeout(timeout);
+            connection.setReadTimeout(timeout);
 
             connection.setDoInput(true);
             connection.setDoOutput(true);
