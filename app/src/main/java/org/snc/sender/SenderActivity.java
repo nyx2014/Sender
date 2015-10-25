@@ -22,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashSet;
 
 public class SenderActivity extends Activity {
 
@@ -75,20 +76,6 @@ public class SenderActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ConnectivityManager connectMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo info = connectMgr.getActiveNetworkInfo();
-
-        if (info!=null) {
-            if(info.getType() == ConnectivityManager.TYPE_WIFI){
-                Toast.makeText(this,"wifi!",Toast.LENGTH_LONG).show();
-            }else {
-                Toast.makeText(this,"mobile!",Toast.LENGTH_LONG).show();
-            }
-        }else {
-            Toast.makeText(this,"Network is down.",Toast.LENGTH_LONG).show();
-            finish();
-        }
-
         if(mPreferences==null){
             mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         }
@@ -96,10 +83,25 @@ public class SenderActivity extends Activity {
         String lTimeout = mPreferences.getString("lTimeout", "3000");
         timeout = Integer.parseInt(lTimeout);
 
-        Toast.makeText(this,timeout+"",Toast.LENGTH_LONG).show();
+        String defaultSvrURL = getString(R.string.pref_default_svr_URL);
 
-        url = mPreferences.getString("lSvrList","http://202.4.136.143/api/test.php");
-        url = url.equals("custom") ? mPreferences.getString("sURL","http://202.4.136.143/api/test.php") : url;
+        url = mPreferences.getString("lSvrList",defaultSvrURL);
+        url = url.equals("custom") ? mPreferences.getString("sURL",defaultSvrURL) : url;
+
+        ConnectivityManager connectMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectMgr.getActiveNetworkInfo();
+
+        if (info!=null) {
+            if(info.getType() == ConnectivityManager.TYPE_WIFI){
+//                Toast.makeText(this,"wifi!",Toast.LENGTH_SHORT).show();
+            }else {
+                url = getResources().getStringArray(R.array.svr_urls)[2];
+//                Toast.makeText(this,"mobile"+url,Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            Toast.makeText(this,"Network is down.",Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         sharedText = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         new Thread(){
@@ -132,9 +134,6 @@ public class SenderActivity extends Activity {
         try {
             _url = new URL(url);
             connection = (HttpURLConnection) _url.openConnection();
-//            int seconds = 3;
-//            connection.setConnectTimeout(seconds * 1000);
-//            connection.setReadTimeout(seconds * 1000);
 
             connection.setConnectTimeout(timeout);
             connection.setReadTimeout(timeout);

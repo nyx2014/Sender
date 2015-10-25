@@ -55,12 +55,12 @@
         <!--<item>-1</item>-->
     <!--</integer-array>-->
     <string name="pref_URL">自定义服务器地址</string>
-    <string name="pref_default_svr_URL">http://202.4.136.143/api/test.php</string>
+    <string name="pref_default_svr_URL">http://202.4.136.143/api/api.php</string>
     <string name="pref_srv_list">可用服务器选择</string>
     <string-array name="svr_urls">
-        <item>http://202.4.136.143/api/test.php</item>
+        <item>http://202.4.136.143/api/api.php</item>
         <item>http://219.225.7.198:8081/api.php</item>
-        <item>http://www.crxzy.com/api/test.php</item>
+        <item>http://www.crxzy.com/api/api.php</item>
         <item>custom</item>
     </string-array>
 
