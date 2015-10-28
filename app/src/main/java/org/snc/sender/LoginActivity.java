@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +26,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.snc.sender.Util.Encryption;
+import org.snc.sender.Util.Network;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -269,14 +274,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            Log.i("Eamorr", Encryption.sha256("asdf"));
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+            // TODO: attempt authentication against a network service.
+            String rs =null;
+
+            if(rs==null)
                 return false;
-            }
+
+            Toast.makeText(getApplicationContext(),rs,Toast.LENGTH_LONG).show();
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
@@ -287,6 +293,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             }
 
             // TODO: register the new account here.
+
             return true;
         }
 

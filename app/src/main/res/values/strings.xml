@@ -17,4 +17,5 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="login_svr_URL">http://202.4.136.143/api/login.php</string>
 </resources>
