@@ -29,8 +29,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.snc.sender.Util.Encryption;
-import org.snc.sender.Util.Network;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -264,6 +273,67 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
+        private String doLogin(String msg,String _url) {
+            String result = null;
+            URL url;
+            HttpURLConnection connection = null;
+            InputStreamReader in = null;
+            try {
+                url = new URL(_url);
+                connection = (HttpURLConnection) url.openConnection();
+
+                int timeout = 3000;
+                connection.setConnectTimeout(timeout);
+                connection.setReadTimeout(timeout);
+
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                connection.setRequestProperty("Charset", "utf-8");
+
+                DataOutputStream dop = new DataOutputStream(
+                        connection.getOutputStream());
+                msg = URLEncoder.encode(msg, "utf-8");
+                dop.writeBytes(msg);
+                dop.flush();
+                dop.close();
+
+                in = new InputStreamReader(connection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(in);
+                StringBuilder strBuffer = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    strBuffer.append(line);
+                }
+                result = strBuffer.toString();
+            } catch (ConnectException ce) {
+                result = "Network is down.";
+                ce.printStackTrace();
+            } catch (FileNotFoundException fe) {
+                result = "Server URL is incorrect.";
+                fe.printStackTrace();
+            } catch (SocketTimeoutException se){
+                result = "Time out. Try again.";
+                se.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+            return result;
+        }
+
         private final String mEmail;
         private final String mPassword;
 
@@ -277,12 +347,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             Log.i("Eamorr", Encryption.sha256("asdf"));
 
             // TODO: attempt authentication against a network service.
-            String rs =null;
+            String rs = doLogin("e="+mEmail+"&p="+Encryption.sha256(mPassword),
+                    getResources().getString(R.string.login_svr_URL));
 
             if(rs==null)
                 return false;
 
-            Toast.makeText(getApplicationContext(),rs,Toast.LENGTH_LONG).show();
+            if(!rs.equals("ok")) {
+                Toast.makeText(getApplicationContext(), rs, Toast.LENGTH_LONG).show();
+                return false;
+            }
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
